@@ -1,0 +1,7 @@
+# Hält die Versionen der verwendeten GitHub Actions aktuell (schlägt Pull Requests vor).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

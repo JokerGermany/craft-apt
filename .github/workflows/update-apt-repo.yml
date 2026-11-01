@@ -1,0 +1,54 @@
+name: Update APT repo
+
+on:
+  schedule:
+    - cron: "23 4 * * *"          # täglich um 04:23 UTC
+  workflow_dispatch:               # manuell startbar (Actions-Tab -> Run workflow)
+  push:
+    branches: [main]
+    paths:
+      - apps.txt
+      - scripts/**
+      - .github/workflows/update-apt-repo.yml
+
+# Nie zwei Deployments gleichzeitig; ein laufendes nicht abbrechen.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Werkzeuge installieren
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends reprepro jq gnupg
+
+      - name: Repository bauen und signieren
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APT_GPG_PRIVATE_KEY: ${{ secrets.APT_GPG_PRIVATE_KEY }}
+          BASE_URL: ${{ vars.BASE_URL }}          # optional; Standard: https://<owner>.github.io/<repo>
+        run: ./scripts/build-repo.sh
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,8 @@
+# Ein GitHub-Repository pro Zeile (owner/name).
+# Leerzeilen und alles nach einem # werden ignoriert.
+# Es wird jeweils das neueste veröffentlichte Release verwendet.
+
+storytold/lightcraft
+
+# Optional, falls du den Launcher ebenfalls per apt aktuell halten willst:
+# storytold/craft-launcher
