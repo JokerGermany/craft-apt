@@ -1,4 +1,4 @@
-# Hält die Versionen der verwendeten GitHub Actions aktuell (schlägt Pull Requests vor).
+# Keeps the versions of the GitHub Actions used here up to date (opens pull requests).
 version: 2
 updates:
   - package-ecosystem: github-actions
