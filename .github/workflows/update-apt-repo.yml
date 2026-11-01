@@ -36,7 +36,7 @@ jobs:
           BASE_URL: ${{ vars.BASE_URL }}          # optional; default: https://<owner>.github.io/<repo>
         run: ./scripts/build-repo.sh
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
